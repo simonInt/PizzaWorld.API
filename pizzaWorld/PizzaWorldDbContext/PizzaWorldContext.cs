@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using pizzaWorld.Models;
-
+using System;
 
 namespace pizzaWorld.PizzaWorldDbContext
 {
-    public class PizzaWorldContext : DbContext
+    public class PizzaWorldContext : IdentityDbContext<User, Role, Guid>
     {
         public PizzaWorldContext(DbContextOptions<PizzaWorldContext> options) : base(options)
         {
