@@ -3,21 +3,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace pizzaWorld.Migrations
 {
-    public partial class IdentityMigration : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "matricul",
-                table: "Scooter",
-                newName: "Matricul");
-
-            migrationBuilder.AddColumn<int>(
-                name: "LivreurId",
-                table: "Pizza",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.CreateTable(
+                name: "Adresse",
+                columns: table => new
+                {
+                    AdresseId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Numero = table.Column<int>(type: "int", nullable: false),
+                    Rue = table.Column<int>(type: "int", nullable: false),
+                    Ville = table.Column<int>(type: "int", nullable: false),
+                    CodePostal = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Adresse", x => x.AdresseId);
+                });
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
@@ -58,6 +62,58 @@ namespace pizzaWorld.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Client",
+                columns: table => new
+                {
+                    ClientId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdAdresse = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Client", x => x.ClientId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredient",
+                columns: table => new
+                {
+                    IngredientId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    nom = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredient", x => x.IngredientId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Livreur",
+                columns: table => new
+                {
+                    LivreurId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Livreur", x => x.LivreurId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Scooter",
+                columns: table => new
+                {
+                    ScooterId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Matricul = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Scooter", x => x.ScooterId);
                 });
 
             migrationBuilder.CreateTable(
@@ -166,20 +222,53 @@ namespace pizzaWorld.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Pizza_LivreurId",
-                table: "Pizza",
-                column: "LivreurId");
+            migrationBuilder.CreateTable(
+                name: "Pizza",
+                columns: table => new
+                {
+                    PizzaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TempPrepa = table.Column<int>(type: "int", nullable: false),
+                    ImgPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LivreurId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pizza", x => x.PizzaId);
+                    table.ForeignKey(
+                        name: "FK_Pizza_Livreur_LivreurId",
+                        column: x => x.LivreurId,
+                        principalTable: "Livreur",
+                        principalColumn: "LivreurId",
+                        onDelete: ReferentialAction.Restrict);
+                });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_IngredientPizza_IdIngredient",
-                table: "IngredientPizza",
-                column: "IdIngredient");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_IngredientPizza_IdPizza",
-                table: "IngredientPizza",
-                column: "IdPizza");
+            migrationBuilder.CreateTable(
+                name: "IngredientPizza",
+                columns: table => new
+                {
+                    IngredientPizzaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdPizza = table.Column<int>(type: "int", nullable: false),
+                    IdIngredient = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IngredientPizza", x => x.IngredientPizzaId);
+                    table.ForeignKey(
+                        name: "FK_IngredientPizza_Ingredient_IdIngredient",
+                        column: x => x.IdIngredient,
+                        principalTable: "Ingredient",
+                        principalColumn: "IngredientId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_IngredientPizza_Pizza_IdPizza",
+                        column: x => x.IdPizza,
+                        principalTable: "Pizza",
+                        principalColumn: "PizzaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -220,44 +309,26 @@ namespace pizzaWorld.Migrations
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_IngredientPizza_Ingredient_IdIngredient",
+            migrationBuilder.CreateIndex(
+                name: "IX_IngredientPizza_IdIngredient",
                 table: "IngredientPizza",
-                column: "IdIngredient",
-                principalTable: "Ingredient",
-                principalColumn: "IngredientId",
-                onDelete: ReferentialAction.Cascade);
+                column: "IdIngredient");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_IngredientPizza_Pizza_IdPizza",
+            migrationBuilder.CreateIndex(
+                name: "IX_IngredientPizza_IdPizza",
                 table: "IngredientPizza",
-                column: "IdPizza",
-                principalTable: "Pizza",
-                principalColumn: "PizzaId",
-                onDelete: ReferentialAction.Cascade);
+                column: "IdPizza");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Pizza_Livreur_LivreurId",
+            migrationBuilder.CreateIndex(
+                name: "IX_Pizza_LivreurId",
                 table: "Pizza",
-                column: "LivreurId",
-                principalTable: "Livreur",
-                principalColumn: "LivreurId",
-                onDelete: ReferentialAction.Cascade);
+                column: "LivreurId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_IngredientPizza_Ingredient_IdIngredient",
-                table: "IngredientPizza");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_IngredientPizza_Pizza_IdPizza",
-                table: "IngredientPizza");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Pizza_Livreur_LivreurId",
-                table: "Pizza");
+            migrationBuilder.DropTable(
+                name: "Adresse");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -275,31 +346,28 @@ namespace pizzaWorld.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Client");
+
+            migrationBuilder.DropTable(
+                name: "IngredientPizza");
+
+            migrationBuilder.DropTable(
+                name: "Scooter");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Pizza_LivreurId",
-                table: "Pizza");
+            migrationBuilder.DropTable(
+                name: "Ingredient");
 
-            migrationBuilder.DropIndex(
-                name: "IX_IngredientPizza_IdIngredient",
-                table: "IngredientPizza");
+            migrationBuilder.DropTable(
+                name: "Pizza");
 
-            migrationBuilder.DropIndex(
-                name: "IX_IngredientPizza_IdPizza",
-                table: "IngredientPizza");
-
-            migrationBuilder.DropColumn(
-                name: "LivreurId",
-                table: "Pizza");
-
-            migrationBuilder.RenameColumn(
-                name: "Matricul",
-                table: "Scooter",
-                newName: "matricul");
+            migrationBuilder.DropTable(
+                name: "Livreur");
         }
     }
 }

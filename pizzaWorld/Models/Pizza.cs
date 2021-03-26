@@ -9,10 +9,9 @@ namespace pizzaWorld.Models
     public class Pizza
     {
         public int PizzaId { get; set; }
-        public int LivreurId { get; set; }
-        [ForeignKey("LivreurId")]
-        public Livreur Livreur { get; set; }
         public string Nom { get; set; }
+        public string Description { get; set; }
         public int TempPrepa { get; set; }
+        public string ImgPath { get; set; }
     }
 }

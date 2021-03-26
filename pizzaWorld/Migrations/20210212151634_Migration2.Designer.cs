@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pizzaWorld.PizzaWorldDbContext;
 
 namespace pizzaWorld.Migrations
 {
     [DbContext(typeof(PizzaWorldContext))]
-    partial class PizzaWorldContextModelSnapshot : ModelSnapshot
+    [Migration("20210212151634_Migration2")]
+    partial class Migration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,9 +219,6 @@ namespace pizzaWorld.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .UseIdentityColumn();
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImgPath")
                         .HasColumnType("nvarchar(max)");

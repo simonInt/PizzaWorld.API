@@ -8,7 +8,6 @@ namespace pizzaWorld.Models
     public class Livreur
     {
         public int LivreurId { get; set; }
-        public int Nom { get; set; }
-        public List<Pizza> Pizzas { get; set; }
+        public string Nom { get; set; }
     }
 }

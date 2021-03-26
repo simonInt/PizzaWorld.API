@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using pizzaWorld.Models;
 using pizzaWorld.Repositories;
 using System.Collections.Generic;
 
 namespace pizzaWorld.Controllers
 {
+    //[Authorize(Roles = "admin")]
     [ApiController]
     [Route("adresse")]
     public class AdresseController : Controller

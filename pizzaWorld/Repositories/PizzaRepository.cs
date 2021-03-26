@@ -29,9 +29,8 @@ namespace pizzaWorld.Repositories
             _context.Pizza.Add(pizza);
             await _context.SaveChangesAsync();
         }
-        public async Task DeletePizza(int id)
+        public async Task DeletePizza(Pizza pizza)
         {
-            Pizza pizza = await GetPizzaById(id);
             _context.Pizza.Remove(pizza);
             await _context.SaveChangesAsync();
         }

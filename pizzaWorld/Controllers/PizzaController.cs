@@ -24,9 +24,9 @@ namespace pizzaWorld.Controllers
         }
 
         [HttpGet("{pizzaId}", Name = "GetPizza")]
-        public ActionResult<Pizza> GetPizzaById(int pizzaId)
+        public async Task<ActionResult<Pizza>> GetPizzaById(int pizzaId)
         {
-            return Ok(_pizzaRepository.GetPizzaById(pizzaId));
+            return Ok(await _pizzaRepository.GetPizzaById(pizzaId));
         }
 
         [HttpPost]
@@ -47,10 +47,17 @@ namespace pizzaWorld.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{subjectId}")]
-        public ActionResult DeletePizza(int pizzaId)
+        [HttpDelete("{pizzaId}")]
+        public async Task<ActionResult> DeletePizza(int pizzaId)
         {
-            _pizzaRepository.DeletePizza(pizzaId);
+            Pizza pizza = await _pizzaRepository.GetPizzaById(pizzaId);
+
+            if(pizza == null)
+            {
+                return NotFound("La pizza n'existe pas.");
+            }
+
+            await _pizzaRepository.DeletePizza(pizza);
             return NoContent();
         }
     }

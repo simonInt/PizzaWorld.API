@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pizzaWorld.PizzaWorldDbContext;
 
 namespace pizzaWorld.Migrations
 {
     [DbContext(typeof(PizzaWorldContext))]
-    partial class PizzaWorldContextModelSnapshot : ModelSnapshot
+    [Migration("20210212151444_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,11 +220,11 @@ namespace pizzaWorld.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ImgPath")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("LivreurId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
@@ -231,6 +233,8 @@ namespace pizzaWorld.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("PizzaId");
+
+                    b.HasIndex("LivreurId");
 
                     b.ToTable("Pizza");
                 });
@@ -418,6 +422,18 @@ namespace pizzaWorld.Migrations
                     b.Navigation("Ingredient");
 
                     b.Navigation("Pizza");
+                });
+
+            modelBuilder.Entity("pizzaWorld.Models.Pizza", b =>
+                {
+                    b.HasOne("pizzaWorld.Models.Livreur", null)
+                        .WithMany("Pizzas")
+                        .HasForeignKey("LivreurId");
+                });
+
+            modelBuilder.Entity("pizzaWorld.Models.Livreur", b =>
+                {
+                    b.Navigation("Pizzas");
                 });
 #pragma warning restore 612, 618
         }

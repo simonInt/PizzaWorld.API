@@ -2,6 +2,7 @@
 using pizzaWorld.Models;
 using pizzaWorld.Repositories;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace pizzaWorld.Controllers
 {
@@ -17,9 +18,9 @@ namespace pizzaWorld.Controllers
         }
 
         [HttpGet]
-        public ActionResult<ICollection<Client>> GetClient()
+        public async Task<ActionResult<ICollection<Client>>> GetClient()
         {
-            return Ok(_clientRepository.GetClient());
+            return Ok(await _clientRepository.GetClient());
         }
 
         [HttpGet("{clientId}", Name = "GetClient")]

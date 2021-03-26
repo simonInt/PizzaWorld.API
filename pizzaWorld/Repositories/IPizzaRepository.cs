@@ -11,7 +11,7 @@ namespace pizzaWorld.Repositories
         Task<List<Pizza>> GetPizza();
         Task<Pizza> GetPizzaById(int id);
         Task CreatePizza(Pizza pizza);
-        Task DeletePizza(int id);
+        Task DeletePizza(Pizza pizza);
         Task UpdatePizza(Pizza pizza);
     }
 }

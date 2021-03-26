@@ -10,8 +10,8 @@ using pizzaWorld.PizzaWorldDbContext;
 namespace pizzaWorld.Migrations
 {
     [DbContext(typeof(PizzaWorldContext))]
-    [Migration("20210115134946_IdentityMigration")]
-    partial class IdentityMigration
+    [Migration("20210226143105_InitialMigration2")]
+    partial class InitialMigration2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -205,8 +205,8 @@ namespace pizzaWorld.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("Nom")
-                        .HasColumnType("int");
+                    b.Property<string>("Nom")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LivreurId");
 
@@ -220,8 +220,11 @@ namespace pizzaWorld.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<int>("LivreurId")
-                        .HasColumnType("int");
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImgPath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nom")
                         .HasColumnType("nvarchar(max)");
@@ -230,8 +233,6 @@ namespace pizzaWorld.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("PizzaId");
-
-                    b.HasIndex("LivreurId");
 
                     b.ToTable("Pizza");
                 });
@@ -419,22 +420,6 @@ namespace pizzaWorld.Migrations
                     b.Navigation("Ingredient");
 
                     b.Navigation("Pizza");
-                });
-
-            modelBuilder.Entity("pizzaWorld.Models.Pizza", b =>
-                {
-                    b.HasOne("pizzaWorld.Models.Livreur", "Livreur")
-                        .WithMany("Pizzas")
-                        .HasForeignKey("LivreurId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Livreur");
-                });
-
-            modelBuilder.Entity("pizzaWorld.Models.Livreur", b =>
-                {
-                    b.Navigation("Pizzas");
                 });
 #pragma warning restore 612, 618
         }
