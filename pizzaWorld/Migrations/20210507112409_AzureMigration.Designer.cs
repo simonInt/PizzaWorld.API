@@ -10,8 +10,8 @@ using pizzaWorld.PizzaWorldDbContext;
 namespace pizzaWorld.Migrations
 {
     [DbContext(typeof(PizzaWorldContext))]
-    [Migration("20210226143105_InitialMigration2")]
-    partial class InitialMigration2
+    [Migration("20210507112409_AzureMigration")]
+    partial class AzureMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

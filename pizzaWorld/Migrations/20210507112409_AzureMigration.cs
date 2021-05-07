@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace pizzaWorld.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class AzureMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -101,6 +101,22 @@ namespace pizzaWorld.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Livreur", x => x.LivreurId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pizza",
+                columns: table => new
+                {
+                    PizzaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TempPrepa = table.Column<int>(type: "int", nullable: false),
+                    ImgPath = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pizza", x => x.PizzaId);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,28 +239,6 @@ namespace pizzaWorld.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pizza",
-                columns: table => new
-                {
-                    PizzaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nom = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TempPrepa = table.Column<int>(type: "int", nullable: false),
-                    ImgPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LivreurId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pizza", x => x.PizzaId);
-                    table.ForeignKey(
-                        name: "FK_Pizza_Livreur_LivreurId",
-                        column: x => x.LivreurId,
-                        principalTable: "Livreur",
-                        principalColumn: "LivreurId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "IngredientPizza",
                 columns: table => new
                 {
@@ -318,11 +312,6 @@ namespace pizzaWorld.Migrations
                 name: "IX_IngredientPizza_IdPizza",
                 table: "IngredientPizza",
                 column: "IdPizza");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Pizza_LivreurId",
-                table: "Pizza",
-                column: "LivreurId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -352,6 +341,9 @@ namespace pizzaWorld.Migrations
                 name: "IngredientPizza");
 
             migrationBuilder.DropTable(
+                name: "Livreur");
+
+            migrationBuilder.DropTable(
                 name: "Scooter");
 
             migrationBuilder.DropTable(
@@ -365,9 +357,6 @@ namespace pizzaWorld.Migrations
 
             migrationBuilder.DropTable(
                 name: "Pizza");
-
-            migrationBuilder.DropTable(
-                name: "Livreur");
         }
     }
 }
